@@ -1,0 +1,14 @@
+[Unit]
+Description=Obex frpc config sync (fetch tunnel config, render frpc.toml, reload frpc)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/obex-frpc/config.env
+ExecStart=/usr/bin/python3 /opt/obex-frpc/obex_frpc_sync.py
+User=obex-frpc
+Group=obex-frpc
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/etc/obex-frpc

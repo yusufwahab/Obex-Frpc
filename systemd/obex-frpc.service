@@ -1,0 +1,19 @@
+[Unit]
+Description=Obex frpc tunnel client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/obex-frpc/config.env
+ExecStart=${OBEX_FRPC_BIN} -c ${OBEX_FRPC_CONFIG_PATH}
+Restart=always
+RestartSec=5
+User=obex-frpc
+Group=obex-frpc
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/etc/obex-frpc
+
+[Install]
+WantedBy=multi-user.target

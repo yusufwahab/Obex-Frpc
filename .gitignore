@@ -1,0 +1,4 @@
+# Generated at runtime on the Pi — never commit real device credentials or
+# rendered tunnel configs.
+config.env
+frpc.toml

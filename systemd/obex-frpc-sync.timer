@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodically sync obex-frpc's tunnel config
+
+[Timer]
+OnBootSec=10s
+OnUnitActiveSec=60s
+Unit=obex-frpc-sync.service
+
+[Install]
+WantedBy=timers.target
