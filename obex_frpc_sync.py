@@ -76,6 +76,17 @@ def render_frpc_toml(tunnels: list[dict], admin_port: int) -> str:
         'auth.method = "token"',
         f'auth.token = "{first["token"]}"',
         "",
+        # frp defaults transport.tcpMux to true, which means the control
+        # connection's liveness relies on tcpMuxKeepaliveInterval (default
+        # 30s) instead of the heartbeat settings (disabled whenever tcpMux is
+        # on). A consumer router's NAT connection tracking can drop an
+        # "idle" TCP mapping faster than a 30s keepalive refreshes it —
+        # observed in practice as frpc reconnecting every ~90s (30s
+        # keepalive x 3 missed probes before yamux gives up), briefly
+        # dropping every proxy each time. Probing more often keeps the NAT
+        # mapping alive before it can time out.
+        "transport.tcpMuxKeepaliveInterval = 10",
+        "",
         # Bound to localhost only — lets this script call `frpc reload`
         # without opening the admin API to the LAN.
         'webServer.addr = "127.0.0.1"',

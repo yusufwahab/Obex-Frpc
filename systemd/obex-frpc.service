@@ -5,8 +5,13 @@ Wants=network-online.target
 
 [Service]
 Type=simple
+# systemd does not expand environment variables in the executable path
+# itself (the first token of ExecStart=) — only in later arguments — so
+# this can't reference ${OBEX_FRPC_BIN}/${OBEX_FRPC_CONFIG_PATH} from
+# config.env here despite EnvironmentFile= being set below. Hardcoded to
+# match install.sh's fixed BIN_PATH/CONFIG_DIR constants instead.
 EnvironmentFile=/etc/obex-frpc/config.env
-ExecStart=${OBEX_FRPC_BIN} -c ${OBEX_FRPC_CONFIG_PATH}
+ExecStart=/usr/local/bin/frpc -c /etc/obex-frpc/frpc.toml
 Restart=always
 RestartSec=5
 User=obex-frpc
